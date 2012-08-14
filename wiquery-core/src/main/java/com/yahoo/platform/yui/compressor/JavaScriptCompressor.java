@@ -24,9 +24,10 @@ import java.util.regex.Pattern;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
-import org.mozilla.javascript.Parser1;
+import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ScriptRuntime;
-import org.mozilla.javascript.Token1;
+import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.AstRoot;
 
 public class JavaScriptCompressor
 {
@@ -61,7 +62,7 @@ public class JavaScriptCompressor
 		twos = new ArrayList<String>();
 		for (int i = 0; i < ones.size(); i++)
 		{
-			final String one = (String) ones.get(i);
+			final String one = ones.get(i);
 			for (char c = 'a'; c <= 'z'; c++)
 				twos.add(one + Character.toString(c));
 			for (char c = 'A'; c <= 'Z'; c++)
@@ -81,7 +82,7 @@ public class JavaScriptCompressor
 		threes = new ArrayList<String>();
 		for (int i = 0; i < twos.size(); i++)
 		{
-			final String two = (String) twos.get(i);
+			final String two = twos.get(i);
 			for (char c = 'a'; c <= 'z'; c++)
 				threes.add(two + Character.toString(c));
 			for (char c = 'A'; c <= 'Z'; c++)
@@ -104,92 +105,92 @@ public class JavaScriptCompressor
 
 		// The following list comes from
 		// org/mozilla/javascript/Decompiler.java...
-		literals.put(new Integer(Token1.GET), "get ");
-		literals.put(new Integer(Token1.SET), "set ");
-		literals.put(new Integer(Token1.TRUE), "true");
-		literals.put(new Integer(Token1.FALSE), "false");
-		literals.put(new Integer(Token1.NULL), "null");
-		literals.put(new Integer(Token1.THIS), "this");
-		literals.put(new Integer(Token1.FUNCTION), "function");
-		literals.put(new Integer(Token1.COMMA), ",");
-		literals.put(new Integer(Token1.LC), "{");
-		literals.put(new Integer(Token1.RC), "}");
-		literals.put(new Integer(Token1.LP), "(");
-		literals.put(new Integer(Token1.RP), ")");
-		literals.put(new Integer(Token1.LB), "[");
-		literals.put(new Integer(Token1.RB), "]");
-		literals.put(new Integer(Token1.DOT), ".");
-		literals.put(new Integer(Token1.NEW), "new ");
-		literals.put(new Integer(Token1.DELPROP), "delete ");
-		literals.put(new Integer(Token1.IF), "if");
-		literals.put(new Integer(Token1.ELSE), "else");
-		literals.put(new Integer(Token1.FOR), "for");
-		literals.put(new Integer(Token1.IN), " in ");
-		literals.put(new Integer(Token1.WITH), "with");
-		literals.put(new Integer(Token1.WHILE), "while");
-		literals.put(new Integer(Token1.DO), "do");
-		literals.put(new Integer(Token1.TRY), "try");
-		literals.put(new Integer(Token1.CATCH), "catch");
-		literals.put(new Integer(Token1.FINALLY), "finally");
-		literals.put(new Integer(Token1.THROW), "throw");
-		literals.put(new Integer(Token1.SWITCH), "switch");
-		literals.put(new Integer(Token1.BREAK), "break");
-		literals.put(new Integer(Token1.CONTINUE), "continue");
-		literals.put(new Integer(Token1.CASE), "case");
-		literals.put(new Integer(Token1.DEFAULT), "default");
-		literals.put(new Integer(Token1.RETURN), "return");
-		literals.put(new Integer(Token1.VAR), "var ");
-		literals.put(new Integer(Token1.SEMI), ";");
-		literals.put(new Integer(Token1.ASSIGN), "=");
-		literals.put(new Integer(Token1.ASSIGN_ADD), "+=");
-		literals.put(new Integer(Token1.ASSIGN_SUB), "-=");
-		literals.put(new Integer(Token1.ASSIGN_MUL), "*=");
-		literals.put(new Integer(Token1.ASSIGN_DIV), "/=");
-		literals.put(new Integer(Token1.ASSIGN_MOD), "%=");
-		literals.put(new Integer(Token1.ASSIGN_BITOR), "|=");
-		literals.put(new Integer(Token1.ASSIGN_BITXOR), "^=");
-		literals.put(new Integer(Token1.ASSIGN_BITAND), "&=");
-		literals.put(new Integer(Token1.ASSIGN_LSH), "<<=");
-		literals.put(new Integer(Token1.ASSIGN_RSH), ">>=");
-		literals.put(new Integer(Token1.ASSIGN_URSH), ">>>=");
-		literals.put(new Integer(Token1.HOOK), "?");
-		literals.put(new Integer(Token1.OBJECTLIT), ":");
-		literals.put(new Integer(Token1.COLON), ":");
-		literals.put(new Integer(Token1.OR), "||");
-		literals.put(new Integer(Token1.AND), "&&");
-		literals.put(new Integer(Token1.BITOR), "|");
-		literals.put(new Integer(Token1.BITXOR), "^");
-		literals.put(new Integer(Token1.BITAND), "&");
-		literals.put(new Integer(Token1.SHEQ), "===");
-		literals.put(new Integer(Token1.SHNE), "!==");
-		literals.put(new Integer(Token1.EQ), "==");
-		literals.put(new Integer(Token1.NE), "!=");
-		literals.put(new Integer(Token1.LE), "<=");
-		literals.put(new Integer(Token1.LT), "<");
-		literals.put(new Integer(Token1.GE), ">=");
-		literals.put(new Integer(Token1.GT), ">");
-		literals.put(new Integer(Token1.INSTANCEOF), " instanceof ");
-		literals.put(new Integer(Token1.LSH), "<<");
-		literals.put(new Integer(Token1.RSH), ">>");
-		literals.put(new Integer(Token1.URSH), ">>>");
-		literals.put(new Integer(Token1.TYPEOF), "typeof");
-		literals.put(new Integer(Token1.VOID), "void ");
-		literals.put(new Integer(Token1.CONST), "const ");
-		literals.put(new Integer(Token1.NOT), "!");
-		literals.put(new Integer(Token1.BITNOT), "~");
-		literals.put(new Integer(Token1.POS), "+");
-		literals.put(new Integer(Token1.NEG), "-");
-		literals.put(new Integer(Token1.INC), "++");
-		literals.put(new Integer(Token1.DEC), "--");
-		literals.put(new Integer(Token1.ADD), "+");
-		literals.put(new Integer(Token1.SUB), "-");
-		literals.put(new Integer(Token1.MUL), "*");
-		literals.put(new Integer(Token1.DIV), "/");
-		literals.put(new Integer(Token1.MOD), "%");
-		literals.put(new Integer(Token1.COLONCOLON), "::");
-		literals.put(new Integer(Token1.DOTDOT), "..");
-		literals.put(new Integer(Token1.DOTQUERY), ".(");
-		literals.put(new Integer(Token1.XMLATTR), "@");
+		literals.put(new Integer(Token.GET), "get ");
+		literals.put(new Integer(Token.SET), "set ");
+		literals.put(new Integer(Token.TRUE), "true");
+		literals.put(new Integer(Token.FALSE), "false");
+		literals.put(new Integer(Token.NULL), "null");
+		literals.put(new Integer(Token.THIS), "this");
+		literals.put(new Integer(Token.FUNCTION), "function");
+		literals.put(new Integer(Token.COMMA), ",");
+		literals.put(new Integer(Token.LC), "{");
+		literals.put(new Integer(Token.RC), "}");
+		literals.put(new Integer(Token.LP), "(");
+		literals.put(new Integer(Token.RP), ")");
+		literals.put(new Integer(Token.LB), "[");
+		literals.put(new Integer(Token.RB), "]");
+		literals.put(new Integer(Token.DOT), ".");
+		literals.put(new Integer(Token.NEW), "new ");
+		literals.put(new Integer(Token.DELPROP), "delete ");
+		literals.put(new Integer(Token.IF), "if");
+		literals.put(new Integer(Token.ELSE), "else");
+		literals.put(new Integer(Token.FOR), "for");
+		literals.put(new Integer(Token.IN), " in ");
+		literals.put(new Integer(Token.WITH), "with");
+		literals.put(new Integer(Token.WHILE), "while");
+		literals.put(new Integer(Token.DO), "do");
+		literals.put(new Integer(Token.TRY), "try");
+		literals.put(new Integer(Token.CATCH), "catch");
+		literals.put(new Integer(Token.FINALLY), "finally");
+		literals.put(new Integer(Token.THROW), "throw");
+		literals.put(new Integer(Token.SWITCH), "switch");
+		literals.put(new Integer(Token.BREAK), "break");
+		literals.put(new Integer(Token.CONTINUE), "continue");
+		literals.put(new Integer(Token.CASE), "case");
+		literals.put(new Integer(Token.DEFAULT), "default");
+		literals.put(new Integer(Token.RETURN), "return");
+		literals.put(new Integer(Token.VAR), "var ");
+		literals.put(new Integer(Token.SEMI), ";");
+		literals.put(new Integer(Token.ASSIGN), "=");
+		literals.put(new Integer(Token.ASSIGN_ADD), "+=");
+		literals.put(new Integer(Token.ASSIGN_SUB), "-=");
+		literals.put(new Integer(Token.ASSIGN_MUL), "*=");
+		literals.put(new Integer(Token.ASSIGN_DIV), "/=");
+		literals.put(new Integer(Token.ASSIGN_MOD), "%=");
+		literals.put(new Integer(Token.ASSIGN_BITOR), "|=");
+		literals.put(new Integer(Token.ASSIGN_BITXOR), "^=");
+		literals.put(new Integer(Token.ASSIGN_BITAND), "&=");
+		literals.put(new Integer(Token.ASSIGN_LSH), "<<=");
+		literals.put(new Integer(Token.ASSIGN_RSH), ">>=");
+		literals.put(new Integer(Token.ASSIGN_URSH), ">>>=");
+		literals.put(new Integer(Token.HOOK), "?");
+		literals.put(new Integer(Token.OBJECTLIT), ":");
+		literals.put(new Integer(Token.COLON), ":");
+		literals.put(new Integer(Token.OR), "||");
+		literals.put(new Integer(Token.AND), "&&");
+		literals.put(new Integer(Token.BITOR), "|");
+		literals.put(new Integer(Token.BITXOR), "^");
+		literals.put(new Integer(Token.BITAND), "&");
+		literals.put(new Integer(Token.SHEQ), "===");
+		literals.put(new Integer(Token.SHNE), "!==");
+		literals.put(new Integer(Token.EQ), "==");
+		literals.put(new Integer(Token.NE), "!=");
+		literals.put(new Integer(Token.LE), "<=");
+		literals.put(new Integer(Token.LT), "<");
+		literals.put(new Integer(Token.GE), ">=");
+		literals.put(new Integer(Token.GT), ">");
+		literals.put(new Integer(Token.INSTANCEOF), " instanceof ");
+		literals.put(new Integer(Token.LSH), "<<");
+		literals.put(new Integer(Token.RSH), ">>");
+		literals.put(new Integer(Token.URSH), ">>>");
+		literals.put(new Integer(Token.TYPEOF), "typeof");
+		literals.put(new Integer(Token.VOID), "void ");
+		literals.put(new Integer(Token.CONST), "const ");
+		literals.put(new Integer(Token.NOT), "!");
+		literals.put(new Integer(Token.BITNOT), "~");
+		literals.put(new Integer(Token.POS), "+");
+		literals.put(new Integer(Token.NEG), "-");
+		literals.put(new Integer(Token.INC), "++");
+		literals.put(new Integer(Token.DEC), "--");
+		literals.put(new Integer(Token.ADD), "+");
+		literals.put(new Integer(Token.SUB), "-");
+		literals.put(new Integer(Token.MUL), "*");
+		literals.put(new Integer(Token.DIV), "/");
+		literals.put(new Integer(Token.MOD), "%");
+		literals.put(new Integer(Token.COLONCOLON), "::");
+		literals.put(new Integer(Token.DOTDOT), "..");
+		literals.put(new Integer(Token.DOTQUERY), ".(");
+		literals.put(new Integer(Token.XMLATTR), "@");
 
 		// See
 		// http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Reserved_Words
@@ -318,7 +319,7 @@ public class JavaScriptCompressor
 				lbits = (long) source.charAt(offset) << 48;
 				lbits |= (long) source.charAt(offset + 1) << 32;
 				lbits |= (long) source.charAt(offset + 2) << 16;
-				lbits |= (long) source.charAt(offset + 3);
+				lbits |= source.charAt(offset + 3);
 				if (type == 'J')
 				{
 					number = lbits;
@@ -347,9 +348,9 @@ public class JavaScriptCompressor
 	{
 
 		final CompilerEnvirons env = new CompilerEnvirons();
-		final Parser1 parser = new Parser1(env, reporter);
-		parser.parse(in, null, 1);
-		final String source = parser.getEncodedSource();
+		final Parser parser = new Parser(env, reporter);
+		AstRoot ast = parser.parse(in, null, 1);
+		final String source = ast.getEncodedSource();
 
 		int offset = 0;
 		final int length = source.length();
@@ -362,24 +363,24 @@ public class JavaScriptCompressor
 			switch (tt)
 			{
 
-				// case Token.CONDCOMMENT:
-				// case Token.KEEPCOMMENT:
-				case Token1.NAME:
-				case Token1.REGEXP:
-				case Token1.STRING:
+			// case Token.CONDCOMMENT:
+			// case Token.KEEPCOMMENT:
+				case Token.NAME:
+				case Token.REGEXP:
+				case Token.STRING:
 					sb.setLength(0);
 					offset = printSourceString(source, offset, sb);
 					tokens.add(new JavaScriptToken(tt, sb.toString()));
 					break;
 
-				case Token1.NUMBER:
+				case Token.NUMBER:
 					sb.setLength(0);
 					offset = printSourceNumber(source, offset, sb);
 					tokens.add(new JavaScriptToken(tt, sb.toString()));
 					break;
 
 				default:
-					final String literal = (String) literals.get(new Integer(tt));
+					final String literal = literals.get(new Integer(tt));
 					if (literal != null)
 					{
 						tokens.add(new JavaScriptToken(tt, literal));
@@ -408,22 +409,21 @@ public class JavaScriptCompressor
 
 			for (i = 0; i < length; i++)
 			{
-				token = (JavaScriptToken) tokens.get(i);
+				token = tokens.get(i);
 				switch (token.getType())
 				{
 
-					case Token1.ADD:
+					case Token.ADD:
 						if (i > 0 && i < length)
 						{
-							prevToken = (JavaScriptToken) tokens.get(i - 1);
-							nextToken = (JavaScriptToken) tokens.get(i + 1);
-							if (prevToken.getType() == Token1.STRING
-								&& nextToken.getType() == Token1.STRING
-								&& (i == length - 1 || ((JavaScriptToken) tokens.get(i + 2))
-									.getType() != Token1.DOT))
+							prevToken = tokens.get(i - 1);
+							nextToken = tokens.get(i + 1);
+							if (prevToken.getType() == Token.STRING
+								&& nextToken.getType() == Token.STRING
+								&& (i == length - 1 || tokens.get(i + 2).getType() != Token.DOT))
 							{
 								tokens.set(i - 1,
-									new JavaScriptToken(Token1.STRING, prevToken.getValue()
+									new JavaScriptToken(Token.STRING, prevToken.getValue()
 										+ nextToken.getValue()));
 								tokens.remove(i + 1);
 								tokens.remove(i);
@@ -441,8 +441,8 @@ public class JavaScriptCompressor
 
 		for (i = 0; i < length; i++)
 		{
-			token = (JavaScriptToken) tokens.get(i);
-			if (token.getType() == Token1.STRING)
+			token = tokens.get(i);
+			if (token.getType() == Token.STRING)
 			{
 				tv = token.getValue();
 
@@ -481,7 +481,7 @@ public class JavaScriptCompressor
 					tv = tv.replaceAll("<\\/script", "<\\\\/script");
 				}
 
-				tokens.set(i, new JavaScriptToken(Token1.STRING, tv));
+				tokens.set(i, new JavaScriptToken(Token.STRING, tv));
 			}
 		}
 	}
@@ -538,18 +538,18 @@ public class JavaScriptCompressor
 		for (i = 0, length = tokens.size(); i < length; i++)
 		{
 
-			if (((JavaScriptToken) tokens.get(i)).getType() == Token1.LB && i > 0 && i < length - 2
-				&& ((JavaScriptToken) tokens.get(i - 1)).getType() == Token1.NAME
-				&& ((JavaScriptToken) tokens.get(i + 1)).getType() == Token1.STRING
-				&& ((JavaScriptToken) tokens.get(i + 2)).getType() == Token1.RB)
+			if (tokens.get(i).getType() == Token.LB && i > 0 && i < length - 2
+				&& tokens.get(i - 1).getType() == Token.NAME
+				&& tokens.get(i + 1).getType() == Token.STRING
+				&& tokens.get(i + 2).getType() == Token.RB)
 			{
-				token = (JavaScriptToken) tokens.get(i + 1);
+				token = tokens.get(i + 1);
 				tv = token.getValue();
 				tv = tv.substring(1, tv.length() - 1);
 				if (isValidIdentifier(tv))
 				{
-					tokens.set(i, new JavaScriptToken(Token1.DOT, "."));
-					tokens.set(i + 1, new JavaScriptToken(Token1.NAME, tv));
+					tokens.set(i, new JavaScriptToken(Token.DOT, "."));
+					tokens.set(i + 1, new JavaScriptToken(Token.NAME, tv));
 					tokens.remove(i + 2);
 					i = i + 2;
 					length = length - 1;
@@ -570,15 +570,15 @@ public class JavaScriptCompressor
 
 		for (i = 0, length = tokens.size(); i < length; i++)
 		{
-			if (((JavaScriptToken) tokens.get(i)).getType() == Token1.OBJECTLIT && i > 0
-				&& ((JavaScriptToken) tokens.get(i - 1)).getType() == Token1.STRING)
+			if (tokens.get(i).getType() == Token.OBJECTLIT && i > 0
+				&& tokens.get(i - 1).getType() == Token.STRING)
 			{
-				token = (JavaScriptToken) tokens.get(i - 1);
+				token = tokens.get(i - 1);
 				tv = token.getValue();
 				tv = tv.substring(1, tv.length() - 1);
 				if (isValidIdentifier(tv))
 				{
-					tokens.set(i - 1, new JavaScriptToken(Token1.NAME, tv));
+					tokens.set(i - 1, new JavaScriptToken(Token.NAME, tv));
 				}
 			}
 		}
@@ -644,7 +644,7 @@ public class JavaScriptCompressor
 
 	private ScriptOrFnScope getCurrentScope()
 	{
-		return (ScriptOrFnScope) scopes.peek();
+		return scopes.peek();
 	}
 
 	private void enterScope(final ScriptOrFnScope scope)
@@ -659,12 +659,12 @@ public class JavaScriptCompressor
 
 	private JavaScriptToken consumeToken()
 	{
-		return (JavaScriptToken) tokens.get(offset++);
+		return tokens.get(offset++);
 	}
 
 	private JavaScriptToken getToken(final int delta)
 	{
-		return (JavaScriptToken) tokens.get(offset + delta);
+		return tokens.get(offset + delta);
 	}
 
 	/*
@@ -721,7 +721,7 @@ public class JavaScriptCompressor
 		final int end = Math.min(offset + max, tokens.size());
 		for (int i = start; i < end; i++)
 		{
-			final JavaScriptToken token = (JavaScriptToken) tokens.get(i);
+			final JavaScriptToken token = tokens.get(i);
 			if (i == offset - 1)
 			{
 				result.append(" ---> ");
@@ -758,7 +758,7 @@ public class JavaScriptCompressor
 		currentScope = getCurrentScope();
 
 		token = consumeToken();
-		if (token.getType() == Token1.NAME)
+		if (token.getType() == Token.NAME)
 		{
 			if (mode == BUILDING_SYMBOL_TREE)
 			{
@@ -775,7 +775,7 @@ public class JavaScriptCompressor
 			token = consumeToken();
 		}
 
-		assert token.getType() == Token1.LP;
+		assert token.getType() == Token.LP;
 		if (mode == BUILDING_SYMBOL_TREE)
 		{
 			fnScope = new ScriptOrFnScope(braceNesting, currentScope);
@@ -783,15 +783,15 @@ public class JavaScriptCompressor
 		}
 		else
 		{
-			fnScope = (ScriptOrFnScope) indexedScopes.get(new Integer(offset));
+			fnScope = indexedScopes.get(new Integer(offset));
 		}
 
 		// Parse function arguments.
 		int argpos = 0;
-		while ((token = consumeToken()).getType() != Token1.RP)
+		while ((token = consumeToken()).getType() != Token.RP)
 		{
-			assert token.getType() == Token1.NAME || token.getType() == Token1.COMMA;
-			if (token.getType() == Token1.NAME && mode == BUILDING_SYMBOL_TREE)
+			assert token.getType() == Token.NAME || token.getType() == Token.COMMA;
+			if (token.getType() == Token.NAME && mode == BUILDING_SYMBOL_TREE)
 			{
 				symbol = token.getValue();
 				identifier = fnScope.declareIdentifier(symbol);
@@ -805,11 +805,11 @@ public class JavaScriptCompressor
 		}
 
 		token = consumeToken();
-		assert token.getType() == Token1.LC;
+		assert token.getType() == Token.LC;
 		braceNesting++;
 
 		token = getToken(0);
-		if (token.getType() == Token1.STRING && getToken(1).getType() == Token1.SEMI)
+		if (token.getType() == Token.STRING && getToken(1).getType() == Token.SEMI)
 		{
 			// This is a hint. Hints are empty statements that look like
 			// "localvar1:nomunge, localvar2:nomunge"; They allow developers
@@ -880,11 +880,11 @@ public class JavaScriptCompressor
 		JavaScriptIdentifier identifier;
 
 		token = getToken(-1);
-		assert token.getType() == Token1.CATCH;
+		assert token.getType() == Token.CATCH;
 		token = consumeToken();
-		assert token.getType() == Token1.LP;
+		assert token.getType() == Token.LP;
 		token = consumeToken();
-		assert token.getType() == Token1.NAME;
+		assert token.getType() == Token.NAME;
 
 		symbol = token.getValue();
 		currentScope = getCurrentScope();
@@ -905,7 +905,7 @@ public class JavaScriptCompressor
 		}
 
 		token = consumeToken();
-		assert token.getType() == Token1.RP;
+		assert token.getType() == Token.RP;
 	}
 
 	private void parseExpression()
@@ -935,8 +935,8 @@ public class JavaScriptCompressor
 			switch (token.getType())
 			{
 
-				case Token1.SEMI:
-				case Token1.COMMA:
+				case Token.SEMI:
+				case Token.COMMA:
 					if (braceNesting == expressionBraceNesting && bracketNesting == 0
 						&& parensNesting == 0)
 					{
@@ -944,32 +944,32 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.FUNCTION:
+				case Token.FUNCTION:
 					parseFunctionDeclaration();
 					break;
 
-				case Token1.LC:
+				case Token.LC:
 					braceNesting++;
 					break;
 
-				case Token1.RC:
+				case Token.RC:
 					braceNesting--;
 					assert braceNesting >= expressionBraceNesting;
 					break;
 
-				case Token1.LB:
+				case Token.LB:
 					bracketNesting++;
 					break;
 
-				case Token1.RB:
+				case Token.RB:
 					bracketNesting--;
 					break;
 
-				case Token1.LP:
+				case Token.LP:
 					parensNesting++;
 					break;
 
-				case Token1.RP:
+				case Token.RP:
 					parensNesting--;
 					break;
 
@@ -983,7 +983,7 @@ public class JavaScriptCompressor
 				// }
 				// break;
 
-				case Token1.NAME:
+				case Token.NAME:
 					symbol = token.getValue();
 
 					if (mode == BUILDING_SYMBOL_TREE)
@@ -1004,9 +1004,9 @@ public class JavaScriptCompressor
 					else if (mode == CHECKING_SYMBOL_TREE)
 					{
 
-						if ((offset < 2 || (getToken(-2).getType() != Token1.DOT
-							&& getToken(-2).getType() != Token1.GET && getToken(-2).getType() != Token1.SET))
-							&& getToken(0).getType() != Token1.OBJECTLIT)
+						if ((offset < 2 || (getToken(-2).getType() != Token.DOT
+							&& getToken(-2).getType() != Token.GET && getToken(-2).getType() != Token.SET))
+							&& getToken(0).getType() != Token.OBJECTLIT)
 						{
 
 							identifier = getIdentifier(symbol, currentScope);
@@ -1074,7 +1074,7 @@ public class JavaScriptCompressor
 			switch (token.getType())
 			{
 
-				case Token1.VAR:
+				case Token.VAR:
 
 					if (mode == BUILDING_SYMBOL_TREE && scope.incrementVarCount() > 1)
 					{
@@ -1083,7 +1083,7 @@ public class JavaScriptCompressor
 
 					/* FALLSTHROUGH */
 
-				case Token1.CONST:
+				case Token.CONST:
 
 					// The var keyword is followed by at least one symbol name.
 					// If several symbols follow, they are comma separated.
@@ -1091,7 +1091,7 @@ public class JavaScriptCompressor
 					{
 						token = consumeToken();
 
-						assert token.getType() == Token1.NAME;
+						assert token.getType() == Token.NAME;
 
 						if (mode == BUILDING_SYMBOL_TREE)
 						{
@@ -1109,10 +1109,10 @@ public class JavaScriptCompressor
 
 						token = getToken(0);
 
-						assert token.getType() == Token1.SEMI || token.getType() == Token1.ASSIGN
-							|| token.getType() == Token1.COMMA || token.getType() == Token1.IN;
+						assert token.getType() == Token.SEMI || token.getType() == Token.ASSIGN
+							|| token.getType() == Token.COMMA || token.getType() == Token.IN;
 
-						if (token.getType() == Token1.IN)
+						if (token.getType() == Token.IN)
 						{
 							break;
 						}
@@ -1120,7 +1120,7 @@ public class JavaScriptCompressor
 						{
 							parseExpression();
 							token = getToken(-1);
-							if (token.getType() == Token1.SEMI)
+							if (token.getType() == Token.SEMI)
 							{
 								break;
 							}
@@ -1128,15 +1128,15 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.FUNCTION:
+				case Token.FUNCTION:
 					parseFunctionDeclaration();
 					break;
 
-				case Token1.LC:
+				case Token.LC:
 					braceNesting++;
 					break;
 
-				case Token1.RC:
+				case Token.RC:
 					braceNesting--;
 					assert braceNesting >= scope.getBraceNesting();
 					if (braceNesting == scope.getBraceNesting())
@@ -1146,7 +1146,7 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.WITH:
+				case Token.WITH:
 					if (mode == BUILDING_SYMBOL_TREE)
 					{
 						// Inside a 'with' block, it is impossible to figure out
@@ -1161,7 +1161,7 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.CATCH:
+				case Token.CATCH:
 					parseCatch();
 					break;
 
@@ -1175,7 +1175,7 @@ public class JavaScriptCompressor
 				// }
 				// break;
 
-				case Token1.NAME:
+				case Token.NAME:
 					symbol = token.getValue();
 
 					if (mode == BUILDING_SYMBOL_TREE)
@@ -1196,8 +1196,8 @@ public class JavaScriptCompressor
 					else if (mode == CHECKING_SYMBOL_TREE)
 					{
 
-						if ((offset < 2 || getToken(-2).getType() != Token1.DOT)
-							&& getToken(0).getType() != Token1.OBJECTLIT)
+						if ((offset < 2 || getToken(-2).getType() != Token.DOT)
+							&& getToken(0).getType() != Token.OBJECTLIT)
 						{
 
 							identifier = getIdentifier(symbol, scope);
@@ -1310,10 +1310,10 @@ public class JavaScriptCompressor
 			switch (token.getType())
 			{
 
-				case Token1.NAME:
+				case Token.NAME:
 
-					if (offset >= 2 && getToken(-2).getType() == Token1.DOT
-						|| getToken(0).getType() == Token1.OBJECTLIT)
+					if (offset >= 2 && getToken(-2).getType() == Token.DOT
+						|| getToken(0).getType() == Token.OBJECTLIT)
 					{
 
 						result.append(symbol);
@@ -1349,20 +1349,20 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.REGEXP:
-				case Token1.NUMBER:
-				case Token1.STRING:
+				case Token.REGEXP:
+				case Token.NUMBER:
+				case Token.STRING:
 					result.append(symbol);
 					break;
 
-				case Token1.ADD:
-				case Token1.SUB:
-					result.append((String) literals.get(new Integer(token.getType())));
+				case Token.ADD:
+				case Token.SUB:
+					result.append(literals.get(new Integer(token.getType())));
 					if (offset < length)
 					{
 						token = getToken(0);
-						if (token.getType() == Token1.INC || token.getType() == Token1.DEC
-							|| token.getType() == Token1.ADD || token.getType() == Token1.DEC)
+						if (token.getType() == Token.INC || token.getType() == Token.DEC
+							|| token.getType() == Token.ADD || token.getType() == Token.DEC)
 						{
 							// Handle the case x +/- ++/-- y
 							// We must keep a white space here. Otherwise, x +++ y
@@ -1373,10 +1373,9 @@ public class JavaScriptCompressor
 							// variable)
 							result.append(' ');
 						}
-						else if (token.getType() == Token1.POS
-							&& getToken(-1).getType() == Token1.ADD
-							|| token.getType() == Token1.NEG
-							&& getToken(-1).getType() == Token1.SUB)
+						else if (token.getType() == Token.POS
+							&& getToken(-1).getType() == Token.ADD || token.getType() == Token.NEG
+							&& getToken(-1).getType() == Token.SUB)
 						{
 							// Handle the case x + + y and x - - y
 							result.append(' ');
@@ -1384,10 +1383,10 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.FUNCTION:
+				case Token.FUNCTION:
 					result.append("function");
 					token = consumeToken();
-					if (token.getType() == Token1.NAME)
+					if (token.getType() == Token.NAME)
 					{
 						result.append(' ');
 						symbol = token.getValue();
@@ -1411,14 +1410,14 @@ public class JavaScriptCompressor
 						}
 						token = consumeToken();
 					}
-					assert token.getType() == Token1.LP;
+					assert token.getType() == Token.LP;
 					result.append('(');
-					currentScope = (ScriptOrFnScope) indexedScopes.get(new Integer(offset));
+					currentScope = indexedScopes.get(new Integer(offset));
 					enterScope(currentScope);
-					while ((token = consumeToken()).getType() != Token1.RP)
+					while ((token = consumeToken()).getType() != Token.RP)
 					{
-						assert token.getType() == Token1.NAME || token.getType() == Token1.COMMA;
-						if (token.getType() == Token1.NAME)
+						assert token.getType() == Token.NAME || token.getType() == Token.COMMA;
+						if (token.getType() == Token.NAME)
 						{
 							symbol = token.getValue();
 							identifier = getIdentifier(symbol, currentScope);
@@ -1432,18 +1431,18 @@ public class JavaScriptCompressor
 								result.append(symbol);
 							}
 						}
-						else if (token.getType() == Token1.COMMA)
+						else if (token.getType() == Token.COMMA)
 						{
 							result.append(',');
 						}
 					}
 					result.append(')');
 					token = consumeToken();
-					assert token.getType() == Token1.LC;
+					assert token.getType() == Token.LC;
 					result.append('{');
 					braceNesting++;
 					token = getToken(0);
-					if (token.getType() == Token1.STRING && getToken(1).getType() == Token1.SEMI)
+					if (token.getType() == Token.STRING && getToken(1).getType() == Token.SEMI)
 					{
 						// This is a hint. Skip it!
 						consumeToken();
@@ -1451,38 +1450,38 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.RETURN:
-				case Token1.TYPEOF:
+				case Token.RETURN:
+				case Token.TYPEOF:
 					result.append(literals.get(new Integer(token.getType())));
 					// No space needed after 'return' and 'typeof' when followed
 					// by '(', '[', '{', a string or a regexp.
 					if (offset < length)
 					{
 						token = getToken(0);
-						if (token.getType() != Token1.LP && token.getType() != Token1.LB
-							&& token.getType() != Token1.LC && token.getType() != Token1.STRING
-							&& token.getType() != Token1.REGEXP && token.getType() != Token1.SEMI)
+						if (token.getType() != Token.LP && token.getType() != Token.LB
+							&& token.getType() != Token.LC && token.getType() != Token.STRING
+							&& token.getType() != Token.REGEXP && token.getType() != Token.SEMI)
 						{
 							result.append(' ');
 						}
 					}
 					break;
 
-				case Token1.CASE:
-				case Token1.THROW:
+				case Token.CASE:
+				case Token.THROW:
 					result.append(literals.get(new Integer(token.getType())));
 					// White-space needed after 'case' and 'throw' when not followed
 					// by a string.
-					if (offset < length && getToken(0).getType() != Token1.STRING)
+					if (offset < length && getToken(0).getType() != Token.STRING)
 					{
 						result.append(' ');
 					}
 					break;
 
-				case Token1.BREAK:
-				case Token1.CONTINUE:
+				case Token.BREAK:
+				case Token.CONTINUE:
 					result.append(literals.get(new Integer(token.getType())));
-					if (offset < length && getToken(0).getType() != Token1.SEMI)
+					if (offset < length && getToken(0).getType() != Token.SEMI)
 					{
 						// If 'break' or 'continue' is not followed by a semi-colon,
 						// it must
@@ -1491,12 +1490,12 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.LC:
+				case Token.LC:
 					result.append('{');
 					braceNesting++;
 					break;
 
-				case Token1.RC:
+				case Token.RC:
 					result.append('}');
 					braceNesting--;
 					assert braceNesting >= currentScope.getBraceNesting();
@@ -1506,11 +1505,11 @@ public class JavaScriptCompressor
 					}
 					break;
 
-				case Token1.SEMI:
+				case Token.SEMI:
 					// No need to output a semi-colon if the next character is a
 					// right-curly...
 					if (preserveAllSemiColons || offset < length
-						&& getToken(0).getType() != Token1.RC)
+						&& getToken(0).getType() != Token.RC)
 					{
 						result.append(';');
 					}
@@ -1539,7 +1538,7 @@ public class JavaScriptCompressor
 				// break;
 
 				default:
-					final String literal = (String) literals.get(new Integer(token.getType()));
+					final String literal = literals.get(new Integer(token.getType()));
 					if (literal != null)
 					{
 						result.append(literal);

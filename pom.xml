@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>7</version>
+		<groupId>fr.openwide.core.parents</groupId>
+		<artifactId>owsi-core-parent-base</artifactId>
+		<version>0.7-SNAPSHOT</version>
 	</parent>
 
 	<prerequisites>
@@ -26,19 +27,16 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<wicket.version>1.5.7</wicket.version>
-		<jackson.version>[1.8,1.8.6],[1.9,1.9.7]</jackson.version>
-		<slf4j.version>[1.6,1.6.4]</slf4j.version>
-		<rhino.version>1.7R2</rhino.version>
-		<junit.version>4.10</junit.version>
+		<wicket.version>${owsi-core.wicket.version}</wicket.version>
+		<jackson.version>${owsi-core.jackson.version}</jackson.version>
+		<slf4j.version>${owsi-core.slf4j.version}</slf4j.version>
+		<rhino.version>${owsi-core.rhino.version}</rhino.version>
+		<junit.version>${owsi-core.junit.version}</junit.version>
 		<servlet-api.version>2.5</servlet-api.version>
 
-		<maven-bundle-plugin.version>2.3.7</maven-bundle-plugin.version>
 		<maven-clean-plugin.version>2.4.1</maven-clean-plugin.version>
 		<maven-compiler-plugin.version>2.4</maven-compiler-plugin.version>
 		<maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
-		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
-		<maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
 		<maven-install-plugin.version>2.3.1</maven-install-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-javadoc-plugin.version>2.8.1</maven-javadoc-plugin.version>
@@ -101,8 +99,8 @@
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>rhino</groupId>
-				<artifactId>js</artifactId>
+				<groupId>org.mozilla</groupId>
+				<artifactId>rhino</artifactId>
 				<version>${rhino.version}</version>
 			</dependency>
 
