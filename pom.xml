@@ -18,11 +18,11 @@
 	<version>1.5.7-SNAPSHOT</version>
 	<name>WiQuery Parent</name>
 
-	<url>https://github.com/wiquery/wiquery</url>
+	<url>https://github.com/openwide-java/wiquery/tree/wicket-1.5</url>
 	<scm>
-		<url>git://github.com/WiQuery/wiquery.git</url>
-		<connection>scm:git:git://github.com/WiQuery/wiquery.git</connection>
-		<developerConnection>scm:git:git@github.com:WiQuery/wiquery.git</developerConnection>
+		<url>git@github.com:openwide-java/wiquery.git</url>
+		<connection>scm:git:git://github.com/openwide-java/wiquery.git</connection>
+		<developerConnection>scm:git:git@github.com:openwide-java/wiquery.git</developerConnection>
 	</scm>
 
 	<properties>
