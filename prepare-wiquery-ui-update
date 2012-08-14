@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [ "$1" == "" ] || [ ! -d $1 ]; then
+	echo "Usage: $0 jquery-development-bundle-directory/"
+	exit 1
+fi
+
+base_directory=$1
+target="${base_directory}/target"
+
+if [ -d ${target} ]; then
+	echo "Target directory ${target} already exists"
+	exit 1
+fi
+
+mkdir ${target}
+
+cp -a ${base_directory}/development-bundle/ui/i18n/jquery-ui-i18n.js ${target}/
+mkdir ${target}/themes
+cp -ra ${base_directory}/css/* ${target}/themes/
+
+for module in ui.widget ui.droppable ui.progressbar ui.mouse ui.position ui.datepicker ui.dialog ui.core ui.draggable effects ui.sortable ui.autocomplete ui.accordion ui.tabs ui.selectable ui.button ui.resizable ui.slider; do
+	module_dir=${module##*.}
+	mkdir ${target}/${module_dir}
+	cp -a ${base_directory}/development-bundle/ui/jquery.${module}*.js ${target}/${module_dir}
+	cp -a ${base_directory}/development-bundle/ui/minified/jquery.${module}*.js ${target}/${module_dir}
+	i18n_files=$(ls ${base_directory}/development-bundle/ui/i18n/jquery.${module}*.js 2> /dev/null | wc -l)
+	if [ "$i18n_files" != "0" ]; then
+		mkdir ${target}/${module_dir}/i18n
+		cp -a ${base_directory}/development-bundle/ui/i18n/jquery.${module}*.js ${target}/${module_dir}/i18n/
+	fi
+done
