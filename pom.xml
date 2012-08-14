@@ -9,7 +9,7 @@
 	<groupId>org.odlabs.wiquery</groupId>
 	<artifactId>wiquery-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.7-SNAPSHOT</version>
+	<version>1.5.7.owsi</version>
 	<name>WiQuery Parent</name>
 
 	<url>https://github.com/openwide-java/wiquery/tree/wicket-1.5</url>
