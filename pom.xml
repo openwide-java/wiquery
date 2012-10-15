@@ -14,19 +14,19 @@
 	<groupId>org.odlabs.wiquery</groupId>
 	<artifactId>wiquery-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>6.0-SNAPSHOT</version>
+	<version>6.0.0.owsi1-SNAPSHOT</version>
 	<name>WiQuery Parent</name>
 
-	<url>https://github.com/wiquery/wiquery</url>
+	<url>https://github.com/openwide-java/wiquery/</url>
 	<scm>
-		<url>git://github.com/WiQuery/wiquery.git</url>
-		<connection>scm:git:git://github.com/WiQuery/wiquery.git</connection>
-		<developerConnection>scm:git:git@github.com:WiQuery/wiquery.git</developerConnection>
+		<url>git://github.com/openwide-java/wiquery.git</url>
+		<connection>scm:git:git://github.com/openwide-java/wiquery.git</connection>
+		<developerConnection>scm:git:git@github.com:openwide-java/wiquery.git</developerConnection>
 	</scm>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<wicket.version>6.0-SNAPSHOT</wicket.version>
+		<wicket.version>6.1.1</wicket.version>
 		<jackson.version>[1.9,1.9.9]</jackson.version>
 		<slf4j.version>[1.6,1.6.7]</slf4j.version>
 		<log4j.version>[1.2.4,1.2.17]</log4j.version>
@@ -366,7 +366,33 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<activation>
+				<property>
+					<name>distribution</name>
+					<value>owsi-core-release</value>
+				</property>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>nexus-owsi-core</id>
+					<name>Nexus OWSI Core</name>
+					<url>https://projects.openwide.fr/services/nexus/content/repositories/owsi-core</url>
+				</repository>
+				<snapshotRepository>
+					<id>nexus-owsi-core-snapshots</id>
+					<name>Nexus OWSI Core Snapshots</name>
+					<url>https://projects.openwide.fr/services/nexus/content/repositories/owsi-core-snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 </project>
