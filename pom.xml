@@ -48,13 +48,6 @@
 		<maven-surefire-plugin.version>2.12.3</maven-surefire-plugin.version>
 	</properties>
 
-	<modules>
-		<module>wiquery-core</module>
-		<module>wiquery-compressor</module>
-		<module>wiquery-jquery-ui</module>
-    	<module>wiquery-demo</module>
-  </modules>
-
 	<dependencyManagement>
 		<dependencies>
 			<!-- WiQuery dependencies -->
@@ -350,6 +343,17 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>wiquery-core</module>
+				<module>wiquery-compressor</module>
+				<module>wiquery-jquery-ui</module>
+				<module>wiquery-demo</module>
+			</modules>
+		</profile>
 		<profile>
 			<activation>
 				<property>
