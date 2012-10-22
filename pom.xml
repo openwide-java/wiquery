@@ -357,6 +357,10 @@
 					<value>owsi-core-release</value>
 				</property>
 			</activation>
+			<modules>
+				<module>wiquery-core</module>
+				<module>wiquery-jquery-ui</module>
+			</modules>
 			<distributionManagement>
 				<repository>
 					<id>nexus-owsi-core</id>
