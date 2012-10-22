@@ -344,6 +344,7 @@
 
 	<profiles>
 		<profile>
+			<id>default</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -355,6 +356,7 @@
 			</modules>
 		</profile>
 		<profile>
+			<id>owsi-core-release</id>
 			<activation>
 				<property>
 					<name>distribution</name>
